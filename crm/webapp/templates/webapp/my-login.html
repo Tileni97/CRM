@@ -1,0 +1,58 @@
+{% extends 'webapp/base.html' %} {% load crispy_forms_tags %} {% block content%}
+<div class="container bg-light shadow-md p-5 form-layout">
+  <h3>Login to your account</h3>
+
+  <hr />
+  <br />
+
+  <form method="POST" autocomplete="off">
+    {% csrf_token %} {{ form.username|as_crispy_field }}
+    <br />
+
+    <!-- Password Field with Eye Toggle -->
+    <div class="password-field">
+      {{ form.password|as_crispy_field }}
+      <button type="button" id="togglePassword" class="btn btn-light">
+        <i id="eyeIcon" class="fa fa-eye" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <br />
+    <button type="submit" class="btn btn-primary w-100 btn-block p-2">
+      Login &nbsp; <i class="fa fa-key" aria-hidden="true"></i>
+    </button>
+  </form>
+
+  <br />
+
+  <div class="text-center">
+    <p>Don't have an account?</p>
+    <a href="{% url 'register' %}"> Register </a>
+  </div>
+</div>
+
+<br />
+{% endblock %} {% block extra_js %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const togglePassword = document.getElementById("togglePassword");
+    const passwordField = document.querySelector('input[name="password"]');
+    const eyeIcon = document.getElementById("eyeIcon");
+
+    if (togglePassword && passwordField && eyeIcon) {
+      togglePassword.addEventListener("click", function () {
+        // Toggle the type attribute
+        const type =
+          passwordField.getAttribute("type") === "password"
+            ? "text"
+            : "password";
+        passwordField.setAttribute("type", type);
+
+        // Toggle the eye icon
+        eyeIcon.classList.toggle("fa-eye");
+        eyeIcon.classList.toggle("fa-eye-slash");
+      });
+    }
+  });
+</script>
+{% endblock %}

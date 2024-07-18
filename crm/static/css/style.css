@@ -1,0 +1,39 @@
+form-layout{
+
+    border-radius: 15px;
+    width: 500px;
+
+}
+
+.message-text{
+
+    color: white;
+
+}
+.password-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .password-field input[type="password"] {
+    width: 100%;
+    padding-right: 300px; /* Space for the button */
+  }
+  
+  .password-field button {
+    position: absolute;
+    right: 0px; /* Adjust as needed */
+    border: none;
+    background: transparent;
+    cursor: pointer;
+  }
+  
+  .password-field button i {
+    font-size: 1.2rem; /* Adjust size as needed */
+  }
+  
+  
+  
+
+
