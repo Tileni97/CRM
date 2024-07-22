@@ -40,6 +40,16 @@
           <td>{{ record.postal_code }}</td>
           <td>{{ record.notes }}</td>
           <td>{{ record.creation_date|date:"Y-m-d" }}</td>
+
+          <td>
+            <a
+              class="btn btn-success btn-sm"
+              href="{% url 'record' record.id %}"
+            >
+              Click to view &nbsp;
+              <i class="fa fa-eye" aria-hidden="true"></i>
+            </a>
+          </td>
         </tr>
         {% endfor %} {% else %}
         <tr>

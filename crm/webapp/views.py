@@ -5,6 +5,7 @@ from django.contrib import messages
 from .forms import CreateUserForm, LoginForm, CreateRecordForm, UpdateRecordForm
 from .models import Records
 from django.core.paginator import Paginator
+from django.shortcuts import get_object_or_404
 
 
 # Home page view
@@ -72,26 +73,32 @@ def create_record(request):
 
 # Update a record view
 
-@login_required(login_url='login') # This decorator ensures that only authenticated users can access this view
+@login_required(login_url='login')
 def update_record(request, pk):
+    record = get_object_or_404(Records, id=pk)
+    form = UpdateRecordForm(instance=record)
     
-        record = Records.objects.get(id=pk) # This gets the record with the id that is passed in the URL
-        form = UpdateRecordForm(instance=record) # This is the form instance that will be rendered in the template
-        if request.method == 'POST': # If the request method is POST, then the form data is validated and saved
-            form = UpdateRecordForm(request.POST, instance=record) # This is the form instance that will be rendered in the template
-            if form.is_valid(): # If the form data is valid, then the form data is saved
-                form.save() # This saves the form data to the database
-                return redirect('dashboard') # Redirects the user to the dashboard page
+    if request.method == 'POST':
+        form = UpdateRecordForm(request.POST, instance=record)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard')
+    
+    context = {'form': form}
+    return render(request, 'webapp/update-record.html', context)
 
-            context = {'form': form} # This is the context dictionary that will be passed to the template
-            return render(request, 'webapp/update-record.html', context) # This renders the update_record.html template with the context dictionary    
 
-            #Rea/ view a record view
-
-@login_required(login_url='login') # This decorator ensures that only authenticated users can access this view
+# - Read / View a singular record view
+@login_required(login_url='login')
 def view_record(request, pk):
-
-    all_records = Records.objects.all() # This gets all the records from the database
-
-    return render(request, 'webapp/view-record.html', context) # This renders the view_record.html template with the context dictionary})
+    record = get_object_or_404(Records, id=pk)
+    context = {'record': record}
+    return render(request, 'webapp/view-record.html', context)
     
+
+# - Delete a record view
+@login_required(login_url='login')
+def delete_record(request, pk):
+    record = get_object_or_404(Records, id=pk)
+    record.delete()
+    return redirect('dashboard')
